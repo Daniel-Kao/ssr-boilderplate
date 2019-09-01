@@ -12,12 +12,12 @@ const store = getStore();
 app.use(express.static('public'));
 
 app.use(
-  '/todos',
-  proxy('https://jsonplaceholder.typicode.com', {
+  '/api',
+  proxy('http://139.9.205.72', {
     proxyReqPathResolver: function(req) {
-      return '/todos' + req.url;
-    },
-  }),
+      return '/api' + req.url;
+    }
+  })
 );
 
 app.get('*', function(req, res) {
@@ -27,12 +27,27 @@ app.get('*', function(req, res) {
 
   matchedRoutes.forEach(item => {
     if (item.route.loadData) {
-      promises.push(item.route.loadData(store));
+      const promise = new Promise((resolve, reject) => {
+        item.route
+          .loadData(store)
+          .then(resolve)
+          .catch(resolve);
+      });
+      promises.push(promise);
     }
   });
 
   Promise.all(promises).then(() => {
-    res.send(render(store, routes, req));
+    const context = {};
+    const html = render(store, routes, req, context);
+    console.log(context);
+    if (context.action === 'REPLACE') {
+      res.redirect(301, context.url);
+    } else if (context.NOT_FOUND) {
+      res.status(404).send(html);
+    } else {
+      res.send(html);
+    }
   });
 });
 

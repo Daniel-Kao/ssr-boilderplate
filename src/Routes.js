@@ -1,25 +1,30 @@
 import App from './App';
 import Home from './containers/Home';
-import Login from './containers/Login';
+import Translation from './containers/Translation';
+import NotFound from './containers/NotFound';
 
 export default [
   {
     path: '/',
     component: App,
+    loadData: App.loadData,
     routes: [
       {
         path: '/',
         component: Home,
         exact: true,
         loadData: Home.loadData,
-        key: 'home',
+        key: 'home'
       },
       {
-        path: '/login',
+        path: '/translation',
         exact: true,
-        component: Login,
-        key: 'login',
+        component: Translation,
+        key: 'translation'
       },
-    ],
-  },
+      {
+        component: NotFound
+      }
+    ]
+  }
 ];
