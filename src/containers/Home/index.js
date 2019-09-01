@@ -12,7 +12,7 @@ function Home(props) {
   return (
     <div>
       {props.newsList.map(item => {
-        return <div key={item.id}>{item.title}</div>;
+        return <div key={item}>{item}</div>;
       })}
     </div>
   );
@@ -24,16 +24,16 @@ Home.loadData = store => {
 
 const mapStateToProps = state => ({
   name: state.home.name,
-  newsList: state.home.newsList,
+  newsList: state.home.newsList
 });
 
 const mapDispatchToProps = dispatch => ({
   getList() {
     dispatch(getList());
-  },
+  }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Home);
